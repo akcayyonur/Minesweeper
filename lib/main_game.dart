@@ -57,4 +57,49 @@ class mainGame extends StatelessWidget {
   void _goToSettings() {
     // Action for the right button
   }
+  // Initializes all lists
+  void _initialiseGame() {
+    // Initialize all squares to having no bombs
+    board = List.generate(rowCount, (i) {
+      return List.generate(columnCount, (j) {
+        return BoardSquare();
+      });
+    });
+
+    // Initialize list to store which squares have been opened
+    openedSquares = List.generate(rowCount * columnCount, (i) => false);
+
+    flaggedSquares = List.generate(rowCount * columnCount, (i) => false);
+
+    // Reset bomb count
+    bombCount = 0;
+    squaresLeft = rowCount * columnCount;
+
+    // Randomly generate bombs
+    Random random = Random();
+    for (int i = 0; i < rowCount; i++) {
+      for (int j = 0; j < columnCount; j++) {
+        int randomNumber = random.nextInt(maxProb);
+        if (randomNumber < bombProb) {
+          board[i][j].hasBomb = true;
+          bombCount++;
+        }
+      }
+    }
+    // Check bombs around and assign numbers
+    for (int i = 0; i < rowCount; i++) {
+      for (int j = 0; j < columnCount; j++) {
+        if (i > 0 && j > 0 && board[i - 1][j - 1].hasBomb) board[i][j].bombsAround++;
+        if (i > 0 && board[i - 1][j].hasBomb) board[i][j].bombsAround++;
+        if (i > 0 && j < columnCount - 1 && board[i - 1][j + 1].hasBomb) board[i][j].bombsAround++;
+        if (j > 0 && board[i][j - 1].hasBomb) board[i][j].bombsAround++;
+        if (j < columnCount - 1 && board[i][j + 1].hasBomb) board[i][j].bombsAround++;
+        if (i < rowCount - 1 && j > 0 && board[i + 1][j - 1].hasBomb) board[i][j].bombsAround++;
+        if (i < rowCount - 1 && board[i + 1][j].hasBomb) board[i][j].bombsAround++;
+        if (i < rowCount - 1 && j < columnCount - 1 && board[i + 1][j + 1].hasBomb) board[i][j].bombsAround++;
+      }
+    }
+
+    setState(() {});
+  }  
 }
