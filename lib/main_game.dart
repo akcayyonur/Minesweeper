@@ -3,6 +3,9 @@ import 'package:minesweeper/board_square.dart';
 import 'dart:math';
 
 class mainGame extends StatelessWidget {
+
+  final GlobalKey<_mainGameState> _gameKey = GlobalKey<_mainGameState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +19,7 @@ class mainGame extends StatelessWidget {
               child: IconButton(
                 onPressed: () {
                   // Call the restart game method from the stateful widget
-                  _mainGameState? gameState = context.findAncestorStateOfType<_mainGameState>();
-                  gameState?._restartGame();
+                  _gameKey.currentState?._initialiseGame();
                 },
                 icon: Image.asset(
                   "assets/smileyface.png",
@@ -43,12 +45,15 @@ class mainGame extends StatelessWidget {
         ),
         toolbarHeight: 56.0,
       ),
-      body: GameWidget(), // Add the stateful widget here
+      body: GameWidget(key: _gameKey), // Add the stateful widget here
     );
   }
 }
 
 class GameWidget extends StatefulWidget {
+
+  GameWidget({Key? key}) : super(key: key);
+
   @override
   _mainGameState createState() => _mainGameState();
 }
@@ -68,7 +73,7 @@ class _mainGameState extends State<GameWidget> {
   late List<bool> flaggedSquares;
 
   // Probability of bomb creating
-  int bombProb = 0;
+  int bombProb = 1;
   int maxProb = 15;
 
   int bombCount = 0;
@@ -155,9 +160,6 @@ class _mainGameState extends State<GameWidget> {
     );
   }
 
-  void _restartGame() {
-    _initialiseGame();
-  }
   void _goToSettings(){
 
   }
