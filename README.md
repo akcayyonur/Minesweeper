@@ -1,5 +1,3 @@
-# ilk_proje
-Hello world
-
-A new Flutter project.
+Mınesweeper
+Minesweeper clone that is done in flutter
 
